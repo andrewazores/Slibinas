@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Robot extends IterativeRobot implements PIDOutput
+public class Robot extends IterativeRobot
 { 
 	//This is declaring the Motors with the corresponding Controllers
 	private WPI_TalonSRX frontLeftDrive = new WPI_TalonSRX(0);
@@ -135,14 +135,14 @@ public class Robot extends IterativeRobot implements PIDOutput
 		ahrs.reset();
 
 		//Executes PID calculations for gyro face buttons
-		turnController = new PIDController(P, I, D, ahrs, this);
+		turnController = new PIDController(P, I, D, ahrs, this::turnPidWrite);
 		turnController.setInputRange(-180.0f,  180.0f);
 		turnController.setOutputRange(-1.0, 1.0);
 		turnController.setAbsoluteTolerance(kToleranceDegrees);
 		turnController.setContinuous(true);
 		
 		//Executes PID calculations for wheel rotations - X Direction
-		xController = new PIDController(Px, Ix, Dx, frontLeftDrive.getSelectedSensorPosition(0), this);
+		xController = new PIDController(Px, Ix, Dx, new TalonSrxPIDSource(frontLeftDrive, 0), this::frontLeftPidWrite);
 		xController.setInputRange(-100000, 100000);
 		xController.setOutputRange(-1.0, 1.0);
 		xController.setAbsoluteTolerance(kToleranceDegrees);
@@ -399,11 +399,15 @@ public class Robot extends IterativeRobot implements PIDOutput
 		}
 	}
 
-	public void pidWrite(double output) 
+	public void turnPidWrite(double output)
 	{
 		rotate = output;
 		xSpeed = output;
 		ySpeed = output;
+	}
+
+	public void frontLeftPidWrite(double output) {
+		// TODO
 	}
 
 	//Preset method that pushes out "right stick X rotation" with PID - backward
