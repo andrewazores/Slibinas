@@ -17,6 +17,10 @@ public class TalonSrxPIDSource implements PIDSource {
         this.sensorIndex = sensorIndex;
     }
 
+    public TalonSrxPIDSource(final WPI_TalonSRX talon) {
+        this(talon, 0);
+    }
+
     @Override
     public void setPIDSourceType(PIDSourceType pidSourceType) {
         this.type = pidSourceType;

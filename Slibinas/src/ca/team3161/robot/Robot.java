@@ -142,7 +142,7 @@ public class Robot extends IterativeRobot
 		turnController.setContinuous(true);
 		
 		//Executes PID calculations for wheel rotations - X Direction
-		xController = new PIDController(Px, Ix, Dx, new TalonSrxPIDSource(frontLeftDrive, 0), this::frontLeftPidWrite);
+		xController = new PIDController(Px, Ix, Dx, new TalonSrxPIDSource(frontLeftDrive), this::frontLeftPidWrite);
 		xController.setInputRange(-100000, 100000);
 		xController.setOutputRange(-1.0, 1.0);
 		xController.setAbsoluteTolerance(kToleranceDegrees);
